@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PAULINAA!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fcefe3;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #lock-screen {
+      background-image: url('https://i.pinimg.com/originals/1a/73/4c/1a734cf86a99754afeaa976b627b4bf4.gif');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      backdrop-filter: blur(3px);
+    }
+
+    .lock-content {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      border-radius: 20px;
+      flex-wrap: wrap;
+    }
+
+    .keypad-display {
+      font-size: 32px;
+      letter-spacing: 6px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      min-width: 250px;
+      text-align: center;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 70px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .keypad button {
+      font-size: 24px;
+      padding: 15px;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid white;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .keypad button:active {
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.4);
+    }
+
+    .hint-box {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      max-width: 220px;
+      text-align: left;
+    }
+
+    .birthday-message {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #444;
+      text-align: center;
+      padding-top: 30px;
+    }
+
+    .bookshelf {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .book {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .book img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .enter-button {
+      font-size: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: white;
+      color: black;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 15px;
+    }
+
+    .enter-button:hover {
+      background: #ddd;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      width: 60%;
+      max-width: 800px;
+      position: relative;
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .modal-message {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .close {
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #999;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lock-screen">
+    <div class="lock-content">
+      <div>
+        <h2>Enter Passcode</h2>
+        <div class="keypad-display" id="display">________</div>
+        <div class="keypad">
+          <button onclick="appendDigit('1')">1</button>
+          <button onclick="appendDigit('2')">2</button>
+          <button onclick="appendDigit('3')">3</button>
+          <button onclick="appendDigit('4')">4</button>
+          <button onclick="appendDigit('5')">5</button>
+          <button onclick="appendDigit('6')">6</button>
+          <button onclick="appendDigit('7')">7</button>
+          <button onclick="appendDigit('8')">8</button>
+          <button onclick="appendDigit('9')">9</button>
+          <button onclick="clearInput()">C</button>
+          <button onclick="appendDigit('0')">0</button>
+          <button onclick="deleteLast()">←</button>
+        </div>
+        <div style="text-align: center;">
+          <button class="enter-button" onclick="checkCode()">Enter</button>
+        </div>
+      </div>
+      <div class="hint-box">
+        <strong>kluee:</strong><br>
+        Siapa yang ulang tahun ya hmmmz
+      </div>
+    </div>
+  </div>
+
+  <div class="container hidden" id="birthday-screen">
+    <div class="birthday-message">
+      🎉 Selamat ulang Tahun Paulina Angela Budiarto 🎂<br/>
+      Sehat selalu ya dan rajin pintar aminn
+    </div>
+
+    <div class="bookshelf">
+      <div class="book" onclick="openModal('https://cakeiy.com/img/banner/birthday-cake-name-paulina.png', 'Selamat ulang tahun paulinaaa semoga hari ini menjadi hari yang spefial untuk kamu karena bertambah umur kamu bukan mines terus wish dari aku kamu sehat selalu jadi anak pintar, nurut orang tua dan menjadi anak yang bisa di banggakan amin!')"><img src="https://cakeiy.com/img/banner/birthday-cake-name-paulina.png" alt="Photo 1"/></div>
+      <div class="book" onclick="openModal('https://media-hosting.imagekit.io/4a1b0228ac1e4ddc/Screenshot%202025-04-21%20203647.png?Expires=1839850724&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=PgX4HHwJFLK8lKiMQMqJSRbGDhgSYDh8vY3z89OmyJHv4XMGyDnJKSsg8VrlCLATP7cU6uQp0lDarQZNL9ho0ztepTVjKXPfUyUSDHs8ltWQ8kUyZNqFfUcoLlNuMChhyBrzAz~s6mohHr-VnKifksaTAaBH~dzQBXxijOZzVj0j-eICoRbBRo2bcPlkPRo4wSPZGAfrhtwugsdtmf1akuG5sENuR-QjH3cxQEU5E~vqf6Vt3ham894L9p53EZ1ubgocc6Umsagt1QKVdcf6UE9aoXHxpLaVk~p02fhbkO3cAWzW7nidNWL-WNK7KAnHajHw~cclGONIPWvaC6IPqQ__')"><img src="https://media-hosting.imagekit.io/4a1b0228ac1e4ddc/Screenshot%202025-04-21%20203647.png?Expires=1839850724&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=PgX4HHwJFLK8lKiMQMqJSRbGDhgSYDh8vY3z89OmyJHv4XMGyDnJKSsg8VrlCLATP7cU6uQp0lDarQZNL9ho0ztepTVjKXPfUyUSDHs8ltWQ8kUyZNqFfUcoLlNuMChhyBrzAz~s6mohHr-VnKifksaTAaBH~dzQBXxijOZzVj0j-eICoRbBRo2bcPlkPRo4wSPZGAfrhtwugsdtmf1akuG5sENuR-QjH3cxQEU5E~vqf6Vt3ham894L9p53EZ1ubgocc6Umsagt1QKVdcf6UE9aoXHxpLaVk~p02fhbkO3cAWzW7nidNWL-WNK7KAnHajHw~cclGONIPWvaC6IPqQ__" alt="Photo 2"/></div>
+      <div class="book" onclick="openModal('', 'Halo selamat ulang tahun yahh lala ini aku yellow semoga kamu jadi anak yang baik jangan pukul yellow jangan hina aku ya awas tonjok nih')"><img src="https://i.ebayimg.com/images/g/lw8AAOSwgmlmAgd7/s-l400.jpg" alt="Photo 3"/></div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img id="modalImage" src="" alt="Image"/>
+      <div id="modalMessage" class="modal-message"></div>
+    </div>
+  </div>
+
+  <script>
+    const correctCode = "22042009";
+    let enteredCode = "";
+
+    function updateDisplay() {
+      const placeholder = "_".repeat(8 - enteredCode.length);
+      document.getElementById("display").textContent = enteredCode + placeholder;
+    }
+
+    function appendDigit(digit) {
+      if (enteredCode.length >= 8) return;
+      enteredCode += digit;
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      enteredCode = enteredCode.slice(0, -1);
+      updateDisplay();
+    }
+
+    function clearInput() {
+      enteredCode = "";
+      updateDisplay();
+    }
+
+    function checkCode() {
+      if (enteredCode === correctCode) {
+        document.getElementById("lock-screen").classList.add("hidden");
+        document.getElementById("birthday-screen").classList.remove("hidden");
+        // fallback in case CSS doesn't apply
+        document.getElementById("lock-screen").style.display = "none";
+        document.getElementById("birthday-screen").style.display = "block";
+      } else {
+        alert("Incorrect passcode!");
+        clearInput();
+      }
+    }
+
+    function openModal(imageSrc, message) {
+      document.getElementById("modalImage").src = imageSrc;
+      document.getElementById("modalMessage").textContent = message;
+      document.getElementById("myModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>
